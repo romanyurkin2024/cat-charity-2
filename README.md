@@ -103,3 +103,8 @@ sqlite3 fastapi.db "UPDATE \"user\" SET is_superuser = 1 WHERE email = 'ваш@e
 pytest
 flake8 .
 ```
+
+
+## Автор
+
+Роман — [GitHub](https://github.com/romanyurkin2024/)
