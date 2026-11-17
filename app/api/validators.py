@@ -5,9 +5,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.crud.charity_project import charity_project_crud
 from app.models import CharityProject
-from app.api.responses import (FULL_AMOUNT_TOO_LOW, NOT_UNIQUE_NAME,
-                               PROJECT_CLOSED, PROJECT_HAS_INVESTMENTS,
-                               PROJECT_NOT_FOUND)
+from app.core.constants import (FULL_AMOUNT_TOO_LOW, NOT_UNIQUE_NAME,
+                                PROJECT_CLOSED, PROJECT_HAS_INVESTMENTS,
+                                PROJECT_NOT_FOUND)
 
 
 async def check_name_duplicate(

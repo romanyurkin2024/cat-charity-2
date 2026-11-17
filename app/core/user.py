@@ -11,10 +11,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.config import settings
 from app.core.db import get_async_session
 from app.models.user import User
-
-
-MIN_PASSWORD_LENGTH = 3
-JWT_LIFETIME_SECONDS = 3600
+from app.core.constants import (JWT_LIFETIME_SECONDS, MIN_PASSWORD_LENGTH,
+                                PASSWORD_CONTAINS_EMAIL, PASSWORD_TOO_SHORT)
 
 
 async def get_user_db(
@@ -46,11 +44,11 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
     ) -> None:
         if len(password) < MIN_PASSWORD_LENGTH:
             raise InvalidPasswordException(
-                reason='Пароль должен быть не короче 3 символов.'
+                reason=PASSWORD_TOO_SHORT
             )
         if user.email in password:
             raise InvalidPasswordException(
-                reason='Пароль не должен содержать e-mail.'
+                reason=PASSWORD_CONTAINS_EMAIL
             )
 
     async def on_after_register(

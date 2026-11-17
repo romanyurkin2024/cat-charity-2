@@ -1,18 +1,10 @@
+from http import HTTPStatus
 from typing import Any
 
+from app.core.constants import (FULL_AMOUNT_TOO_LOW, NOT_UNIQUE_NAME,
+                                PROJECT_CLOSED, PROJECT_HAS_INVESTMENTS)
 
-NOT_UNIQUE_NAME = 'Проект с таким именем уже существует!'
-PROJECT_CLOSED = 'Закрытый проект нельзя редактировать!'
-FULL_AMOUNT_TOO_LOW = (
-    'Нелья установить значение full_amount меньше уже вложенной суммы.'
-)
-PROJECT_HAS_INVESTMENTS = (
-    'В проект были внесены средства, не подлежит удалению!'
-)
-ResponsesType = dict[int | str, dict[str, Any]]
-PROJECT_NOT_FOUND = 'Проект не найден!'
-
-DETAIL_SCHEMA = {
+DETAIL_SCHEMA: dict[str, Any] = {
     'type': 'object',
     'properties': {'detail': {'type': 'string'}},
 }
@@ -33,17 +25,19 @@ def error_response(
     }
 
 
-NOT_FOUND = error_response('The project does not exist')
+ResponsesType = dict[int | str, dict[str, Any]]
+
+NOT_FOUND: dict[str, Any] = error_response('The project does not exist')
 
 CREATE_RESPONSES: ResponsesType = {
-    400: error_response(
+    HTTPStatus.BAD_REQUEST: error_response(
         'Not unique name',
         {'notUniqueName': ('Not unique name', NOT_UNIQUE_NAME)},
     ),
 }
 
 UPDATE_RESPONSES: ResponsesType = {
-    400: error_response(
+    HTTPStatus.BAD_REQUEST: error_response(
         'Invalid operations',
         {
             'fullAmountTooLow': (
@@ -54,11 +48,11 @@ UPDATE_RESPONSES: ResponsesType = {
             'projectClosed': ('Project closed', PROJECT_CLOSED),
         },
     ),
-    404: NOT_FOUND,
+    HTTPStatus.NOT_FOUND: NOT_FOUND,
 }
 
 DELETE_RESPONSES: ResponsesType = {
-    400: error_response(
+    HTTPStatus.BAD_REQUEST: error_response(
         'Нельзя удалять закрытый проект или проект, '
         'в который уже были инвестированы средства.',
         {
@@ -68,5 +62,5 @@ DELETE_RESPONSES: ResponsesType = {
             ),
         },
     ),
-    404: NOT_FOUND,
+    HTTPStatus.NOT_FOUND: NOT_FOUND,
 }
